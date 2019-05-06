@@ -38,10 +38,8 @@ func GetPeopleEndpoint(w http.ResponseWriter, req *http.Request){
 }
 
 func CreatePersonEndpoint(w http.ResponseWriter, req *http.Request){
-	params := mux.Vars(req)
 	var person Person
 	_ = json.NewDecoder(req.Body).Decode(&person)
-	person.ID = params["id"]
 	people = append(people, person)
 	json.NewEncoder(w).Encode(people)
 
@@ -68,7 +66,7 @@ func main() {
 	// endpoints
 	router.HandleFunc("/people", GetPeopleEndpoint).Methods("GET")
 	router.HandleFunc("/people/{id}", GetPersonEndpoint).Methods("GET")
-	router.HandleFunc("/people/{id}", CreatePersonEndpoint).Methods("POST")
+	router.HandleFunc("/people", CreatePersonEndpoint).Methods("POST")
 	router.HandleFunc("/people/{id}", DeletePersonEndpoint).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
